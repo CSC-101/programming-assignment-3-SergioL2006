@@ -1,7 +1,10 @@
+from functools import reduce
+
 import data
 import build_data
 import unittest
 
+import hw3
 
 # These two values are defined to support testing below. The
 # data within these structures should not be modified. Doing
@@ -180,19 +183,89 @@ class TestCases(unittest.TestCase):
 
     # Part 1
     # test population_total
+    def test_part_1_1(self):
+        result = hw3.population_total(reduced_data)
+        check = 655813
+        self.assertEqual(check, result)
+
+    def test_part_1_2(self):
+        result = hw3.population_total(reduced_data)
+        check = 318857056
+        self.assertNotEqual(check, result)
+
+    #def test_part_1_2(self):
 
     # Part 2
     # test filter_by_state
+    def test_part_2_1(self):
+        result = hw3.filter_by_state(reduced_data, "CA")
+        check = [reduced_data[2], reduced_data[3]]
+        self.assertEqual(check, result)
 
+    def test_part_2_2(self):
+        result = hw3.filter_by_state(reduced_data, "AL")
+        check = [reduced_data[0]]
+        self.assertEqual(check, result)
     # Part 3
     # test population_by_education
     # test population_by_ethnicity
     # test population_below_poverty_level
+    def test_part_3_ed_1(self):
+        result = hw3.population_by_education(reduced_data, "Bachelor's Degree or Higher")
+        check = 195114.09
+        self.assertEqual(check, result)
+
+    def test_part_3_ed_2(self):
+        result = hw3.population_by_education(reduced_data, "Hispanic or Latino")
+        check = 0
+        self.assertEqual(check, result)
+
+    def test_part_3_eth_1(self):
+        result = hw3.population_by_ethnicity(reduced_data, "Two or More Races")
+        check = 23613.95
+        self.assertEqual(check, result)
+
+    def test_part_3_eth_2(self):
+        result = hw3.population_by_ethnicity(reduced_data, "Bachelor's Degree or Higher")
+        check = 0
+        self.assertEqual(check, result)
+       
+
+    def test_part_3_pov(self):
+        result = hw3.population_below_poverty_level(reduced_data)
+        check = 107711.71
+        self.assertEqual(check, result)
 
     # Part 4
     # test percent_by_education
     # test percent_by_ethnicity
     # test percent_below_poverty_level
+    def test_part_4_ed_1(self):
+        result = hw3.percent_by_education(reduced_data, "Bachelor's Degree or Higher")
+        check = 30
+        self.assertEqual(check, result)
+
+    def test_part_4_ed_2(self):
+        result = hw3.percent_by_education(reduced_data, "High School or Higher")
+        check = 86
+        self.assertEqual(check, result)
+
+    def test_part_4_eth_1(self):
+        result = hw3.percent_by_ethnicity(reduced_data, "Two or More Races")
+        check = 4
+        self.assertEqual(check, result)
+
+    def test_part_4_eth_2(self):
+        result = hw3.percent_by_ethnicity(reduced_data, "High School or Higher")
+        check = 0
+        self.assertEqual(check, result)
+
+    def test_part_4_pov(self):
+        result = hw3.percent_below_poverty_level(reduced_data)
+        check = 16
+        self.assertEqual(check, result)
+
+    
 
     # Part 5
     # test education_greater_than
@@ -201,8 +274,66 @@ class TestCases(unittest.TestCase):
     # test ethnicity_less_than
     # test below_poverty_level_greater_than
     # test below_poverty_level_less_than
+    def test_part_5_greater_ed_1(self):
+        result = hw3.education_greater_than(reduced_data, "Bachelor's Degree or Higher", 20)
+        check = [reduced_data[0], reduced_data[2], reduced_data[3]]
+        self.assertEqual(check, result)
+
+    def test_part_5_greater_ed_2(self):
+        result = hw3.education_greater_than(reduced_data, "High School or Higher", 80)
+        check =[reduced_data[0], reduced_data[1], reduced_data[2],reduced_data[3],reduced_data[4],reduced_data[5],reduced_data[6]]
+        self.assertEqual(check, result)
+
+    def test_part_5_lesser_ed_1(self):
+        result = hw3.education_less_than(reduced_data, "Bachelor's Degree or Higher", 20)
+        check = [reduced_data[1], reduced_data[4], reduced_data[5], reduced_data[6]]
+        self.assertEqual(check, result)
+
+    def test_part_5_lesser_ed_2(self):
+        result = hw3.education_less_than(reduced_data, "High School or Higher", 80)
+        check = []
+        self.assertEqual(check, result)
 
 
+    def test_part_5_greater_eth_1(self):
+        result = hw3.ethnicity_greater_than(reduced_data, "Hispanic or Latino", 30)
+        check = [reduced_data[3]]
+        self.assertEqual(check, result)
+
+    def test_part_5_greater_eth_2(self):
+        result = hw3.ethnicity_greater_than(reduced_data, "Black Alone", 3.1)
+        check = [reduced_data[0], reduced_data[5]]
+        self.assertEqual(check, result)
+
+    def test_part_5_less_eth_1(self):
+        result = hw3.ethnicity_less_than(reduced_data, "Hispanic or Latino", 30)
+        check = [reduced_data[0], reduced_data[1], reduced_data[2], reduced_data[4], reduced_data[5], reduced_data[6]]
+        self.assertEqual(check, result)
+
+    def test_part_5_less_eth_2(self):
+        result = hw3.ethnicity_less_than(reduced_data, "Black Alone", 3.1)
+        check = [reduced_data[1],reduced_data[2],reduced_data[3],reduced_data[4],reduced_data[6]]
+        self.assertEqual(check, result)
+
+    def test_part_5_greater_pov_1(self):
+        result = hw3.below_poverty_level_greater_than(reduced_data, 15)
+        check = [reduced_data[1], reduced_data[3], reduced_data[4],reduced_data[5]]
+        self.assertEqual(check, result)
+
+    def test_part_5_greater_pov_2(self):
+        result = hw3.below_poverty_level_greater_than(reduced_data, 100)
+        check = []
+        self.assertEqual(check, result)
+
+    def test_part_5_less_pov_1(self):
+        result = hw3.below_poverty_level_less_than(reduced_data, 15)
+        check = [reduced_data[0],reduced_data[2],reduced_data[6]]
+        self.assertEqual(check, result)
+
+    def test_part_5_less_pov_2(self):
+        result = hw3.below_poverty_level_less_than(reduced_data, 100)
+        check = [reduced_data[0], reduced_data[1],reduced_data[2],reduced_data[3],reduced_data[4],reduced_data[5],reduced_data[6]]
+        self.assertEqual(check, result)
 
 if __name__ == '__main__':
     unittest.main()
